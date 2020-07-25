@@ -31,6 +31,18 @@ router.route('/')
   .catch((err) => next(err));
 });
 
+router.route('/:userId')
+.put(cors.corsWithOptions, authenticate.verifyUser,  (req, res, next) => {
+  User.findByIdAndUpdate(req.params.userId, {
+      $set: req.body
+  }, { new: true })
+  .then((user) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(user);
+  }, (err) => next(err))
+  .catch((err) => next(err));
+})
 router.post('/signup',cors.corsWithOptions, (req, res, next) => {
   User.register(new User({username: req.body.username}),
   req.body.password, (err, user) => {
