@@ -1,3 +1,4 @@
+// This module uses AdminBro to create an admin panel for the application
 const AdminBro = require('admin-bro')
 const AdminBroExpress = require('admin-bro-expressjs')
 const AdminBroMongoose = require('admin-bro-mongoose')
