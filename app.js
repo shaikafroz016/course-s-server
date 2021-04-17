@@ -18,10 +18,9 @@ const uploadRouter = require('./routes/uploadRouter');
 const favoriteRouter = require('./routes/favoriteRouter');
 var commentRouter = require('./routes/commentRouter');
 var urlRouter = require('./routes/urlRouter');
-var cors = require('cors')
 var app = express();
 
-app.use(cors())
+
 //db config
 const db=require('./config/keys').MongoURI;
 
@@ -31,21 +30,11 @@ mongoose.connect(db, { useNewUrlParser:true})
 .then(() => console.log('mongo db connected..'))
 .catch(err => console.log(err));
 
-//serve static assect if it is production
-if ( process.env.NODE_ENV === "production"){
-  app.use(express.static("client/build"));
-
-  app.get('*', (req,res) => {
-    res.sendFile(path.resolve(__dirname, "client","build", "index.html"));
-  });
-}
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use('/admin', adminRouter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('12345-67890-09876-54321'));
@@ -56,10 +45,11 @@ app.use(passport.initialize());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/admin', adminRouter);
 
 
 
-app.use(express.static(path.join(__dirname, 'build', 'index.html')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/dishes',dishRouter);
