@@ -7,7 +7,7 @@ require('../models/user')
 require('../models/promotions')
 require('../models/leaders')
 require('../models/favorite')
-require('../models/dishes')
+require('../models/courses')
 require('../models/comments')
 require('../models/urls')
 

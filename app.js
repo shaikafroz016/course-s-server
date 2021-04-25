@@ -9,6 +9,7 @@ var FileStore = require('session-file-store')(session);
 var passport = require('passport');
 var authenticate = require('./authenticate');
 const adminRouter = require('./routes/admin')
+const faculty=require('./routes/faculty')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
@@ -39,6 +40,7 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use('/admin', adminRouter);
+app.use('/faculty', faculty);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('12345-67890-09876-54321'));

@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const authenticate = require('../authenticate');
 const Favorites = require('../models/favorite');
-const Dishes = require('../models/dishes');
+const Dishes = require('../models/courses');
 const urls = require('../models/urls');
 const cors = require('./cors');
 
