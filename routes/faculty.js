@@ -4,7 +4,7 @@ const AdminBroMongoose1 = require('admin-bro-mongoose')
 const mongoose1 = require('mongoose')
 
 
-const Courses = require('../models/courses')
+const Courses = require('../models/dishes')
 
 
 AdminBro1.registerAdapter(AdminBroMongoose1)

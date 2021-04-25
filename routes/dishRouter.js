@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const Dishes = require('../models/courses');
+const Dishes = require('../models/dishes');
 var authenticate = require('../authenticate');
 
 const dishRouter = express.Router();
