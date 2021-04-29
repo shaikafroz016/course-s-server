@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const authenticate = require('../authenticate');
-const Favorites = require('../models/favorite');
-const Dishes = require('../models/dishes');
+const Favorites = require('../models/enroll');
+const Courses = require('../models/courses');
 const urls = require('../models/urls');
 const cors = require('./cors');
 
@@ -15,7 +15,7 @@ favoriteRouter.route('/')
     .get(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
         Favorites.find({ user: req.user._id })
             .populate('user')
-            .populate('dishes')
+            .populate('courses')
             .then((favorite) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
@@ -30,13 +30,13 @@ favoriteRouter.route('/')
                     var favorite = new Favorites();
                     favorite.user = req.user._id;
                     for (i = 0; i < req.body.length; i++) {
-                        favorite.dishes.push(req.body[i]);
+                        favorite.courses.push(req.body[i]);
                     }
                     favorite.save()
                         .then((favorite) => {
                             Favorites.findById(favorite._id)
                             .populate('user')
-                            .populate('dishes')
+                            .populate('courses')
                             .then((favorite) => {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');
@@ -48,15 +48,15 @@ favoriteRouter.route('/')
                     console.log(req.body);
                     for (i = 0; i < req.body.length; i++) {
                         console.log("Body message is "+ req.body[i]._id);
-                        if (!favorite[0].dishes.includes(req.body[i]._id)) {
-                            favorite[0].dishes.push(req.body[i]);
+                        if (!favorite[0].courses.includes(req.body[i]._id)) {
+                            favorite[0].courses.push(req.body[i]);
                         }
                     }
                     favorite[0].save()
                     .then((favorite) => {
                         Favorites.findById(favorite._id)
                             .populate('user')
-                            .populate('dishes')
+                            .populate('courses')
                             .then((favorite) => {
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
@@ -83,15 +83,15 @@ favoriteRouter.route('/')
             .catch((err) => next(err));
     });
 
-favoriteRouter.route('/:dishId')
+favoriteRouter.route('/:courseId')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
 .get(cors.cors, (req,res,next) => {
-    Dishes.findById(req.params.dishId)
+    Courses.findById(req.params.courseId)
     .populate('comments.author')
-    .then((dish) => {
+    .then((course) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(dish);
+        res.json(course);
     }, (err) => next(err))
     .catch((err) => next(err));
 })
@@ -102,12 +102,12 @@ favoriteRouter.route('/:dishId')
                 if (favorite.length == 0) {
                     var favorite = new Favorites();
                     favorite.user = req.user._id;
-                    favorite.dishes.push(req.params.dishId);
+                    favorite.courses.push(req.params.courseId);
                     favorite.save()
                     .then((favorite) => {
                         Favorites.findById(favorite._id)
                         .populate('user')
-                        .populate('dishes')
+                        .populate('courses')
                         .then((favorite) => {
                         res.statusCode = 200;
                         res.setHeader('Content-Type', 'application/json');
@@ -115,17 +115,17 @@ favoriteRouter.route('/:dishId')
                         })
                         }, (err) => next(err))                        
                 } else {
-                    if (favorite[0].dishes.includes(req.params.dishId)) {
-                        err = new Error('Dish ' + req.params.dishId + ' already in favorites');
+                    if (favorite[0].courses.includes(req.params.courseId)) {
+                        err = new Error('Course ' + req.params.courseId + ' already in favorites');
                         err.statusCode = 403;
                         return next(err);
                     } else {
-                        favorite[0].dishes.push(req.params.dishId);
+                        favorite[0].courses.push(req.params.courseId);
                         favorite[0].save()
                         .then((favorite) => {
                             Favorites.findById(favorite._id)
                             .populate('user')
-                            .populate('dishes')
+                            .populate('courses')
                             .then((favorite) => {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');
@@ -141,7 +141,7 @@ favoriteRouter.route('/:dishId')
 
     .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
-        res.end('Put operation not supported on /favorites/:dishId');
+        res.end('Put operation not supported on /favorites/:courseId');
     })
 
     .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
@@ -152,14 +152,14 @@ favoriteRouter.route('/:dishId')
                     err.statusCode = 403;
                     return next(err);
                 } else {
-                    if (favorite[0].dishes.includes(req.params.dishId)) {
-                        index = favorite[0].dishes.indexOf(req.params.dishId);
-                        favorite[0].dishes.splice(index,1);
+                    if (favorite[0].courses.includes(req.params.courseId)) {
+                        index = favorite[0].courses.indexOf(req.params.courseId);
+                        favorite[0].courses.splice(index,1);
                         favorite[0].save()
                         .then((favorite) => {
                             Favorites.findById(favorite._id)
                             .populate('user')
-                            .populate('dishes')
+                            .populate('courses')
                             .then((favorite) => {
                             res.statusCode = 200;
                             res.setHeader('Content-Type', 'application/json');
@@ -167,7 +167,7 @@ favoriteRouter.route('/:dishId')
                             });
                             }, (err) => next(err))
                     } else {
-                        err = new Error('Dish ' + req.params.dishId + ' is not in favorites');
+                        err = new Error('Course ' + req.params.courseId + ' is not in favorites');
                         err.statusCode = 403;
                         return next(err);
                     }

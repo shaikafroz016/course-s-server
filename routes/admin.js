@@ -4,13 +4,10 @@ const AdminBroMongoose = require('admin-bro-mongoose');
 
 const mongoose = require('mongoose');
 require('../models/user')
-require('../models/promotions')
-require('../models/leaders')
-require('../models/favorite')
-require('../models/dishes')
+require('../models/faculties')
+require('../models/enroll')
+require('../models/courses')
 require('../models/comments')
-require('../models/urls')
-
 AdminBro.registerAdapter(AdminBroMongoose);
 
 const adminBro = new AdminBro({

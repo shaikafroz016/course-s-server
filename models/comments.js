@@ -18,7 +18,7 @@ var commentSchema = new Schema({
     },
     dish: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Dish'
+        ref: 'Course'
     }
 }, {
     timestamps: true
